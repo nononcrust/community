@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import { Providers } from "./providers";
 
 export default function RootLayout({
@@ -10,9 +11,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
-      <body className={`${pretendard.variable} antialiased`}>
-        <Providers>{children}</Providers>
+    <html lang="ko" suppressHydrationWarning className={pretendard.variable}>
+      <body className="antialiased">
+        <Suspense>
+          <Providers>{children}</Providers>
+        </Suspense>
       </body>
     </html>
   );

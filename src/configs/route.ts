@@ -2,11 +2,13 @@ export const ROUTE = {
   HOME: "/",
   POST: {
     LIST: "/posts",
-    DETAIL: "/posts/:id",
+    DETAIL: (id: string) => `/posts/${id}`,
+    CREATE: "/posts/write",
   },
   AUTH: {
     LOGIN: "/login",
     SIGNUP: "/signup",
     FORGOT_PASSWORD: "/forgot-password",
   },
+  MYPAGE: "/mypage",
 } as const;

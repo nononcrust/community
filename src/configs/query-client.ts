@@ -1,3 +1,4 @@
+import { Duration } from "@/lib/duration";
 import { QueryClientConfig } from "@tanstack/react-query";
 
 export const queryClientConfig = {
@@ -6,7 +7,7 @@ export const queryClientConfig = {
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      staleTime: 0,
+      staleTime: Duration.minutes(1),
       gcTime: 0,
     },
   },

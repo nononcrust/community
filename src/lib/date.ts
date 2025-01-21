@@ -8,6 +8,8 @@ export const Brand = {
 export type ISODateString = z.infer<typeof Brand.ISODateString>;
 export const ISODateString = (isoDateString: string) => isoDateString as ISODateString;
 
+export const toISOString = (date: Date) => ISODateString(date.toISOString());
+
 export const formatToTimeAgo = (isoDateString: ISODateString): string => {
   const date = new Date(isoDateString);
 

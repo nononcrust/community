@@ -3,21 +3,22 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 
-const GetPostsRequestQuery = z.object({
-  page: z.number().optional(),
-  limit: z.number().optional(),
-  search: z.string().optional(),
+export type CreatePostRequestBody = z.infer<typeof CreatePostRequestBody>;
+export const CreatePostRequestBody = z.object({
+  title: z.string(),
+  content: z.string(),
 });
 
-export const post = new Hono().get("/", zValidator("query", GetPostsRequestQuery), async (c) => {
-  const posts = await prisma.post.findMany();
-  const total = await prisma.post.count();
+export const post = new Hono().post("/", zValidator("json", CreatePostRequestBody), async (c) => {
+  const body = c.req.valid("json");
 
-  return c.json(
-    {
-      posts,
-      total,
+  const post = await prisma.post.create({
+    data: {
+      title: body.title,
+      content: body.content,
+      authorId: "cm65x53v100009kze57d5vu1g",
     },
-    200,
-  );
+  });
+
+  return c.json(post, 201);
 });
