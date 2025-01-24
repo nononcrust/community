@@ -15,8 +15,10 @@ export const formatToTimeAgo = (isoDateString: ISODateString): string => {
 
   const diffMs = Math.floor(Date.now() - date.getTime());
 
+  if (diffMs < Duration.seconds(1)) {
+  }
   if (diffMs < Duration.minutes(1)) {
-    return `${Math.floor(diffMs / Duration.seconds(1))}초 전`;
+    return "방금 전";
   } else if (diffMs < Duration.hours(1)) {
     return `${Math.floor(diffMs / Duration.minutes(1))}분 전`;
   } else if (diffMs < Duration.days(1)) {

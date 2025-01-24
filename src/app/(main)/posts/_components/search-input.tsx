@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useInput } from "@/hooks/use-input";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useUpdateSearchParams } from "@/hooks/use-update-search-params";
 
 type SearchInputProps = {
   initialValue: string;
@@ -10,16 +10,13 @@ type SearchInputProps = {
 
 export const SearchInput = ({ initialValue }: SearchInputProps) => {
   const input = useInput(initialValue);
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { updateSearchParams } = useUpdateSearchParams();
 
   const onSearch = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", "1");
-    params.set("search", input.value);
-
-    router.push(pathname + "?" + params.toString());
+    updateSearchParams({
+      search: input.value,
+      page: null,
+    });
   };
 
   return (

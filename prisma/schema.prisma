@@ -17,6 +17,8 @@ model User {
 
   posts Post[]
   comments Comment[]
+  likes Like[]
+  reports Report[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,11 +32,28 @@ model Post {
   author User @relation(fields: [authorId], references: [id])
   authorId String
 
+  category Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+
   comments Comment[]
+  likes Like[]
+  views View[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
+model View {
+  id String @id @default(cuid())
+
+  post Post @relation(fields: [postId], references: [id])
+  postId String
+
+  ipAddress String?
+  userId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Comment {
@@ -49,6 +68,50 @@ model Comment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id String @id @default(cuid())
+
+  post Post @relation(fields: [postId], references: [id])
+  postId String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String @unique
+
+  posts Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Report {
+  id String @id @default(cuid())
+  content String
+
+  type ReportType
+
+  targetId String
+
+  reporter User? @relation(fields: [reporterId], references: [id])
+  reporterId String?
+  ipAddress String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ReportType {
+  POST
+  COMMENT
 }
 
 enum Role {

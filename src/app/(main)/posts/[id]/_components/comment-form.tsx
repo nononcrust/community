@@ -1,20 +1,48 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { CommentInput } from "@/components/post/comment-input";
 import { useInput } from "@/hooks/use-input";
-import TextareaAutosize from "react-textarea-autosize";
+import { useCreateComment } from "@/services/comment";
+import { Post } from "@/services/post";
+import { useRouter } from "next/navigation";
 
-export const CommentForm = () => {
+type CommentFormProps = {
+  postId: Post["id"];
+};
+
+export const CommentForm = ({ postId }: CommentFormProps) => {
   const input = useInput();
+  const router = useRouter();
+
+  const { mutate: createComment, isPending } = useCreateComment();
+
+  const onSubmit = () => {
+    if (isPending) return;
+
+    createComment(
+      {
+        content: input.value,
+        postId: postId,
+      },
+      {
+        onSuccess: () => {
+          input.clear();
+          router.refresh();
+        },
+      },
+    );
+  };
 
   return (
-    <div className="mt-8 flex flex-col gap-4">
-      <TextareaAutosize
-        className="min-h-[120px] rounded-lg border border-border bg-background p-3 outline-none"
+    <CommentInput.Container className="mt-8">
+      <CommentInput
+        placeholder="댓글을 입력하세요."
         value={input.value}
         onChange={input.onChange}
       />
-      <Button className="self-end">작성하기</Button>
-    </div>
+      <CommentInput.Button onClick={onSubmit} disabled={input.value.length === 0}>
+        작성하기
+      </CommentInput.Button>
+    </CommentInput.Container>
   );
 };

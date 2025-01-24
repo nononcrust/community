@@ -3,7 +3,8 @@ export const ROUTE = {
   POST: {
     LIST: "/posts",
     DETAIL: (id: string) => `/posts/${id}`,
-    CREATE: "/posts/write",
+    WRITE: "/posts/write",
+    EDIT: (id: string) => `/posts/${id}/edit`,
   },
   AUTH: {
     LOGIN: "/login",
