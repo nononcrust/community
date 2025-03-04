@@ -44,7 +44,7 @@ const DialogContent = ({
           animation === "pop" &&
             "duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
           animation === "slide" &&
-            "ease-out-expo !duration-500 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-[600px] data-[state=open]:slide-in-from-left-1/2",
+            "ease-out-expo duration-500! data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-[600px] data-[state=open]:slide-in-from-left-1/2",
           className,
         )}
         {...props}

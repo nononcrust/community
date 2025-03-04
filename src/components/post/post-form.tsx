@@ -82,14 +82,14 @@ export const PostForm = ({ mode, categories, initialValues, onSubmit }: PostForm
       <input
         value={titleInput.value}
         onChange={titleInput.onChange}
-        className="mt-4 text-lg font-medium outline-none placeholder:text-placeholder"
+        className="mt-4 text-lg font-medium outline-hidden placeholder:text-placeholder"
         placeholder="제목을 입력해주세요."
         maxLength={MAX_POST_TITLE_LENGTH}
       />
       <TextareaAutosize
         value={contentInput.value}
         onChange={contentInput.onChange}
-        className="mt-4 min-h-[320px] outline-none placeholder:text-placeholder"
+        className="mt-4 min-h-[320px] outline-hidden placeholder:text-placeholder"
         placeholder="내용을 입력하세요."
         maxLength={MAX_POST_CONTENT_LENGTH}
       />

@@ -24,7 +24,7 @@ export const SearchInput = ({ initialValue }: SearchInputProps) => {
       <input
         value={input.value}
         onChange={input.onChange}
-        className="h-9 rounded-md border border-gray-300 bg-background px-3 text-sm outline-none"
+        className="h-9 rounded-md border border-gray-300 bg-background px-3 text-sm outline-hidden"
         placeholder="검색어를 입력해주세요."
         onKeyDown={(e) => e.key === "Enter" && onSearch()}
       />

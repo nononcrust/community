@@ -41,9 +41,9 @@ const DropdownMenuItem = ({ className, children, ...props }: DropdownMenuItemPro
   return (
     <DropdownMenuPrimitives.Item
       className={cn(
-        "relative flex cursor-pointer select-none items-center gap-2 rounded-[6px] px-2 py-1.5 text-sm font-medium text-main outline-none",
+        "relative flex cursor-pointer select-none items-center gap-2 rounded-[6px] px-2 py-1.5 text-sm font-medium text-main outline-hidden",
         "focus:bg-background-hover",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "data-disabled:pointer-events-none data-disabled:opacity-50",
         "[&_svg]:shrink-0",
         className,
       )}
