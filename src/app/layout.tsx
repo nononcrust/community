@@ -11,7 +11,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className={pretendard.variable}>
+    <html lang="ko" suppressHydrationWarning className={`${pretendard.variable} font-pretendard`}>
       <body className="antialiased">
         <Suspense>
           <Providers>{children}</Providers>

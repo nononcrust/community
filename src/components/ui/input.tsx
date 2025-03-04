@@ -2,7 +2,12 @@ import { cn } from "@/lib/utils";
 
 type InputProps = React.ComponentPropsWithRef<"input">;
 
-export const Input = ({ className, ["aria-invalid"]: ariaInvalid, ...props }: InputProps) => {
+export const Input = ({
+  className,
+  ["aria-invalid"]: ariaInvalid,
+  readOnly,
+  ...props
+}: InputProps) => {
   return (
     <input
       className={cn(
@@ -10,9 +15,11 @@ export const Input = ({ className, ["aria-invalid"]: ariaInvalid, ...props }: In
         "focus-visible:focus-input-ring",
         "placeholder-placeholder",
         "disabled:pointer-events-none disabled:opacity-50",
+        readOnly && "bg-background-100",
         ariaInvalid && "focus-visible:focus-input-ring-error border-error",
         className,
       )}
+      readOnly={readOnly}
       {...props}
     />
   );

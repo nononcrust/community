@@ -8,8 +8,12 @@ export const ROUTE = {
   },
   AUTH: {
     LOGIN: "/login",
-    SIGNUP: "/signup",
+    SIGNUP: {
+      EMAIL: "/signup/email",
+      SOCIAL: "/signup/social",
+    },
     FORGOT_PASSWORD: "/forgot-password",
+    SAME_EMAIL: "/same-email",
   },
   MYPAGE: "/mypage",
 } as const;
