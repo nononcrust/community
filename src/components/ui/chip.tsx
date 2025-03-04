@@ -1,33 +1,35 @@
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 
-const chipVariant = cva("inline-flex font-medium justify-center items-center", {
-  variants: {
-    variant: {
-      primary: "bg-primary text-white",
-      secondary: "bg-secondary text-main",
-      outlined: "border border-border text-main",
-      info: "bg-blue-50 text-blue-700",
-      success: "bg-green-50 text-green-700",
-      warning: "bg-yellow-50 text-yellow-700",
-      danger: "bg-red-50 text-red-700",
+const chipVariants = cva(
+  "inline-flex items-center justify-center rounded-full border border-transparent font-medium transition-colors",
+  {
+    variants: {
+      variant: {
+        primary: "border-transparent bg-primary text-white",
+        secondary: "border-transparent bg-secondary text-main",
+        primaryLowOutlined:
+          "border-primary text-primary bg-primary-lighter hover:bg-primary-lighter-hover dark:bg-primary-darker dark:text-white dark:border-primary-dark dark:hover:bg-primary-darker-hover",
+      },
+      size: {
+        xsmall: "h-6 gap-0.5 px-2 text-[12px]",
+        small: "h-7 gap-0.5 px-2.5 text-[12px]",
+        medium: "h-8 gap-1 px-3 text-[13px]",
+        large: "h-9 gap-1.5 px-3.5 text-sm",
+      },
     },
-    size: {
-      medium: "px-2 min-h-6 text-xs rounded-[6px]",
-      large: "px-[10px] min-h-7 text-[13px] rounded-[8px]",
+    defaultVariants: {
+      variant: "primary",
+      size: "medium",
     },
   },
-  defaultVariants: {
-    variant: "primary",
-    size: "medium",
-  },
-});
+);
 
-type ChipProps = React.ComponentPropsWithRef<"span"> & VariantProps<typeof chipVariant>;
+type ChipProps = React.ComponentPropsWithRef<"span"> & VariantProps<typeof chipVariants>;
 
 export const Chip = ({ className, variant, size, children, ...props }: ChipProps) => {
   return (
-    <span className={cn(chipVariant({ size, variant, className }))} {...props}>
+    <span className={cn(chipVariants({ variant, size, className }))} {...props}>
       {children}
     </span>
   );

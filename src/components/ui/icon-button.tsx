@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
+import { buttonVariant } from "./button";
 
 export type IconButtonProps = React.ComponentPropsWithRef<"button"> &
   VariantProps<typeof iconButtonVariants> & {
@@ -16,12 +17,7 @@ const iconButtonVariants = cva(
   ),
   {
     variants: {
-      variant: {
-        primary: "bg-primary text-white hover:bg-primary-dark",
-        secondary: "bg-secondary text-main hover:bg-secondary-dark",
-        outlined: "border border-border text-main hover:bg-background-hover",
-        ghost: "hover:bg-background-hover",
-      },
+      variant: buttonVariant,
       size: {
         xsmall: "size-7 text-xs",
         small: "size-8 text-sm",
@@ -42,6 +38,7 @@ export const IconButton = ({
   variant,
   size,
   asChild = false,
+  disabled,
   "aria-label": ariaLabel,
   ...props
 }: IconButtonProps) => {
@@ -49,8 +46,11 @@ export const IconButton = ({
 
   return (
     <Component
+      type="button"
       className={cn(iconButtonVariants({ size, variant, className }))}
+      disabled={disabled}
       aria-label={ariaLabel}
+      aria-disabled={disabled}
       {...props}
     >
       {children}
