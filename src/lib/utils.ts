@@ -5,7 +5,7 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-export const focusInputToCurosrEnd = (input: HTMLInputElement | HTMLTextAreaElement) => {
+export const focusInputToCursorEnd = (input: HTMLInputElement | HTMLTextAreaElement) => {
   input.setSelectionRange(input.value.length, input.value.length);
   input.focus();
 };

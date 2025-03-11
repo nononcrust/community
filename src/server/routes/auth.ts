@@ -2,14 +2,24 @@ import { ROUTE } from "@/configs/route";
 import { prisma } from "@/server/lib/prisma";
 import { GoogleCallbackSearchParams, googleClient } from "@/services/google";
 import { zValidator } from "@hono/zod-validator";
+import { Provider } from "@prisma/client";
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
+import { z } from "zod";
+import { sessionTokens } from "../lib/session";
 
-export const auth = new Hono().get(
-  "/callback/google",
-  zValidator("query", GoogleCallbackSearchParams),
-  async (c) => {
+export type SocialSignupRequestBody = z.infer<typeof SocialSignupRequestBody>;
+export const SocialSignupRequestBody = z.object({
+  email: z.string().email(),
+  nickname: z.string(),
+  provider: z.nativeEnum(Provider),
+  providerId: z.string(),
+});
+
+export const auth = new Hono()
+  .get("/callback/google", zValidator("query", GoogleCallbackSearchParams), async (c) => {
     const searchParams = c.req.valid("query");
+    const sessionToken = sessionTokens(c);
 
     const { name, email, sub } = await googleClient.getUserInfo(searchParams.code);
 
@@ -17,7 +27,7 @@ export const auth = new Hono().get(
       where: {
         accounts: {
           some: {
-            provider: "GOOGLE",
+            provider: Provider.GOOGLE,
             providerId: sub,
           },
         },
@@ -25,7 +35,9 @@ export const auth = new Hono().get(
     });
 
     if (existingUser) {
-      // TODO: 로그인 처리
+      await sessionToken.issue({ user: { id: existingUser.id } });
+
+      return c.redirect(ROUTE.HOME);
     }
 
     const existingUserWithSameEmail = await prisma.user.findFirst({
@@ -38,12 +50,36 @@ export const auth = new Hono().get(
       return c.redirect(ROUTE.AUTH.SAME_EMAIL);
     }
 
-    const redirectToSignup = () => {
-      setCookie(c, "provider", JSON.stringify({ name, email, sub }));
+    setCookie(
+      c,
+      "provider",
+      JSON.stringify({ name, email, providerId: sub, provider: Provider.GOOGLE }),
+    );
 
-      return c.redirect(ROUTE.AUTH.SIGNUP.SOCIAL);
-    };
+    return c.redirect(ROUTE.AUTH.SIGNUP.SOCIAL);
+  })
+  .post("/signup/social", zValidator("json", SocialSignupRequestBody), async (c) => {
+    const body = c.req.valid("json");
 
-    return redirectToSignup();
-  },
-);
+    await prisma.user.create({
+      data: {
+        email: body.email,
+        nickname: body.nickname,
+        accounts: {
+          create: {
+            provider: body.provider,
+            providerId: body.providerId,
+          },
+        },
+      },
+    });
+
+    return c.json({ message: "회원가입이 완료되었습니다." }, 201);
+  })
+  .post("/logout", async (c) => {
+    const sessionToken = sessionTokens(c);
+
+    sessionToken.clear();
+
+    return c.json({ message: "로그아웃 되었습니다." }, 200);
+  });

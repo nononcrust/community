@@ -6,7 +6,7 @@ import { IconButton } from "@/components/ui/icon-button";
 import { useSession } from "@/features/auth/use-session";
 import { useInput } from "@/hooks/use-input";
 import { formatToTimeAgo, toISOString } from "@/lib/date";
-import { focusInputToCurosrEnd } from "@/lib/utils";
+import { focusInputToCursorEnd } from "@/lib/utils";
 import { Comment, useDeleteComment, useUpdateComment } from "@/services/comment";
 import { User } from "@/services/user";
 import { EllipsisIcon, XIcon } from "lucide-react";
@@ -64,7 +64,7 @@ export const CommentListItem = ({ id, content, author, createdAt }: CommentListI
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-semibold">{author.nickname}</span>
-          <span className="text-sm font-medium text-subtle">
+          <span className="text-subtle text-sm font-medium">
             {formatToTimeAgo(toISOString(createdAt))}
           </span>
         </div>
@@ -102,7 +102,7 @@ export const CommentListItem = ({ id, content, author, createdAt }: CommentListI
           </IconButton>
         )}
       </div>
-      {!isEditing && <p className="mt-1 whitespace-pre-wrap text-sm">{content}</p>}
+      {!isEditing && <p className="mt-1 text-sm whitespace-pre-wrap">{content}</p>}
       {isEditing && <CommentEditForm content={content} onSubmit={onEditContent} />}
     </li>
   );
@@ -121,7 +121,7 @@ const CommentEditForm = ({ content: initialContent, onSubmit }: CommentEditFormP
   const onInputMount = (input: HTMLTextAreaElement | null) => {
     if (!input) return;
 
-    focusInputToCurosrEnd(input);
+    focusInputToCursorEnd(input);
   };
 
   return (

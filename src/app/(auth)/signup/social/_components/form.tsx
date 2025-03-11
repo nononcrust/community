@@ -5,10 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/toast";
-import { ProviderInfo } from "@/services/auth";
+import { ROUTE } from "@/configs/route";
+import { ProviderInfo, useSocialSignup } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronRightIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,15 +27,15 @@ const signupFormSchema = z.object({
 });
 
 type SignupFormProps = {
-  providerInfo: ProviderInfo | null;
+  providerInfo: ProviderInfo;
 };
 
 export const SignupForm = ({ providerInfo }: SignupFormProps) => {
   const form = useForm({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
-      email: providerInfo?.email ?? "",
-      nickname: "",
+      email: providerInfo.email,
+      nickname: providerInfo.name,
       age: false,
       service: false,
       privacy: false,
@@ -71,8 +72,24 @@ export const SignupForm = ({ providerInfo }: SignupFormProps) => {
     }
   };
 
-  const onSubmit = form.handleSubmit(() => {
-    toast.success("회원가입 되었습니다!");
+  const { mutate: signUp } = useSocialSignup();
+
+  const router = useRouter();
+
+  const onSubmit = form.handleSubmit((data) => {
+    signUp(
+      {
+        email: data.email,
+        nickname: data.nickname,
+        provider: providerInfo.provider,
+        providerId: providerInfo.providerId,
+      },
+      {
+        onSuccess: () => {
+          router.replace(ROUTE.HOME);
+        },
+      },
+    );
   });
 
   return (

@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 
+import { SessionProvider } from "@/features/auth/session-provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Suspense } from "react";
@@ -14,7 +15,9 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning className={`${pretendard.variable} font-pretendard`}>
       <body className="antialiased">
         <Suspense>
-          <Providers>{children}</Providers>
+          <SessionProvider>
+            <Providers>{children}</Providers>
+          </SessionProvider>
         </Suspense>
       </body>
     </html>

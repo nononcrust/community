@@ -1,19 +1,7 @@
-import { User, USER_ID } from "@/services/user";
+import { useSessionContext } from "./session-context-provider";
 
-type Session = {
-  user: {
-    id: User["id"];
-    name: string;
-  };
-};
-
-export const useSession = (): { session: Session | null } => {
-  const session = {
-    user: {
-      id: USER_ID,
-      name: "노논",
-    },
-  };
+export const useSession = () => {
+  const { session } = useSessionContext();
 
   return { session };
 };

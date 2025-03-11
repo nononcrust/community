@@ -1,25 +1,20 @@
 import { env } from "@/env";
+import { Session } from "@/features/auth/session";
 import { Duration } from "@/lib/duration";
 import { Context } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { sign, verify } from "hono/jwt";
-import { z } from "zod";
 
-const SESSION_TOKEN_KEY = "auth.session-token";
+export const SESSION_TOKEN_KEY = "auth.session-token";
 
 const sessionTokenConfig = {
   expiresIn: Math.floor(Date.now() / 1000) + Duration.days(30),
 } as const;
 
-export type SessionTokenPayload = z.infer<typeof SessionTokenPayload>;
-const SessionTokenPayload = z.object({
-  userId: z.string(),
-});
+export const JWT_SECRET = env.JWT_SECRET;
 
-const JWT_SECRET = env.JWT_SECRET;
-
-const issueSessionToken = async (payload: SessionTokenPayload, c: Context) => {
+const issueSessionToken = async (payload: Session, c: Context) => {
   const jwtPayload = {
     ...payload,
     exp: sessionTokenConfig.expiresIn,
@@ -43,7 +38,7 @@ const verifySessionToken = async (c: Context) => {
   }
 
   try {
-    return SessionTokenPayload.parse(await verify(token, JWT_SECRET));
+    return Session.parse(await verify(token, JWT_SECRET));
   } catch {
     return null;
   }
@@ -56,7 +51,7 @@ const clearSessionToken = (c: Context) => {
 export const sessionTokens = (c: Context) => {
   return {
     get: () => getCookie(c, SESSION_TOKEN_KEY),
-    issue: (payload: SessionTokenPayload) => issueSessionToken(payload, c),
+    issue: (payload: Session) => issueSessionToken(payload, c),
     verify: () => verifySessionToken(c),
     clear: () => clearSessionToken(c),
   };
