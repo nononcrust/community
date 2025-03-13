@@ -10,7 +10,9 @@
     "type-check:watch": "tsc --noEmit --watch",
     "lint": "next lint",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "test": "vitest",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
@@ -58,6 +60,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.51.0",
     "@tailwindcss/postcss": "^4.0.9",
     "@tanstack/eslint-plugin-query": "^5.64.2",
     "@testing-library/dom": "^10.4.0",

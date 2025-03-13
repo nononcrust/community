@@ -95,6 +95,7 @@ export default function LoginPage() {
               className="border-border flex size-10 items-center justify-center rounded-full border"
               type="button"
               href={googleSignInUrl}
+              data-testid="google-login-button"
             >
               <GoogleLogo />
             </Link>
